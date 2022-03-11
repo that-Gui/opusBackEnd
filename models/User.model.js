@@ -13,7 +13,6 @@ const userSchema = new Schema(
     contacts: [{type: Schema.Types.ObjectId, ref: 'Contact'}],
     accounts: [{type: Schema.Types.ObjectId, ref: 'Account'}],
     deals: [{type: Schema.Types.ObjectId, ref: 'Deal'}],
-    products: [],
   },
   {
     timestamps: true,

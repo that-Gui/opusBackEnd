@@ -148,3 +148,7 @@ req.session.destroy((err) => {
 }); */
 
 module.exports = router;
+
+/* {
+  "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjJiNDhmYWQzZThjMTU1MDdmMjk0NGYiLCJ1c2VybmFtZSI6ImthcmluYSIsImlhdCI6MTY0NzAwMzkxNCwiZXhwIjoxNjQ3MDI1NTE0fQ.fHMgf9n5P4204gCDk_E8OpjC1auFYhq2mLUvNJJ7xsc"
+} */

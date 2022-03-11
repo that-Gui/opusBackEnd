@@ -27,6 +27,11 @@ app.use('/auth', authRoutes);
 const contactRoutes = require('./routes/contact.routes');
 app.use('/api', isAuthenticated, contactRoutes);
 
+const accountRoutes = require('./routes/account.routes');
+app.use('/api', isAuthenticated, accountRoutes);
+
+const dealRoutes = require('./routes/deal.routes');
+app.use('/api', isAuthenticated, dealRoutes);
 
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes

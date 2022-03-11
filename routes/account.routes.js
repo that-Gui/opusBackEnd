@@ -11,36 +11,36 @@ const { Router } = require("express");
 
 
 // create an account route
-router.post('/contact', (req, res, next) => {
+router.post('/account', (req, res, next) => {
     const { _id } = req.payload;
-    const { firstName, email, telephone, location } = req.body;
+    const { name, industryType, email, telephone } = req.body;
   
-    Contact.create({ firstName, email, telephone, location, user: _id})
-      .then((newcontact) => {
-          return User.findByIdAndUpdate(_id, {$push : {contacts: newcontact._id}}, {new: true});
+    Account.create({name, industryType, email, telephone, user: _id})
+      .then((newacc) => {
+          return User.findByIdAndUpdate(_id, {$push : {accounts: newacc._id}}, {new: true});
       }).then((response) => res.json(response))
       .catch((err) => next(err));
       
 });
 
   // get all accounts route
-router.get('/contact', (req, res, next) =>{
+router.get('/account', (req, res, next) =>{
     const { _id } = req.payload;
-    Contact.find({user:_id}).then((response) => res.json(response))
+    Account.find({user:_id}).then((response) => res.json(response))
     .catch((err) => res.json(err));
   
   });
 
 //route to request a single account
-router.get('/contact/:contactId', (req, res, next) => {
-    const { contactId } = req.params;
+router.get('/account/:accountId', (req, res, next) => {
+    const { accountId } = req.params;
     const { _id } = req.payload;
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    if (!mongoose.Types.ObjectId.isValid(accountId)) {
       res.status(400).json({ message: 'Specified Id is not valid' });
       return;
     }
   
-    Contact.findById(contactId).populate('deals accounts').then((response) => {
+    Account.findById(accountId).populate('contacts deals').then((response) => {
         if(_id === response.user ) {res.json(response)} else {
       res.status(400).json({ message: 'Specified Id is not valid' })};
         
@@ -49,29 +49,29 @@ router.get('/contact/:contactId', (req, res, next) => {
   });
 
 //route to update a contact
-router.put('/contact/:contactId', (req, res, next) => {
-    const { contactId } = req.params;
+router.put('/account/:accountId', (req, res, next) => {
+    const { accountId } = req.params;
   
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    if (!mongoose.Types.ObjectId.isValid(accountId)) {
       res.status(400).json({ message: 'Specified Id is not valid' });
       return;
     }
   
-    Contact.findByIdAndUpdate(contactId, req.body, { new: true })
+    Account.findByIdAndUpdate(accountId, req.body, { new: true })
       .then((response) => res.json(response))
       .catch((err) => res.json(err));
   });
 
 //route to delete a contact
-router.delete('/contact/:contactId', (req, res, next) => {
-    const { contactId } = req.params;
+router.delete('/account/:accountId', (req, res, next) => {
+    const { accountId } = req.params;
   
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    if (!mongoose.Types.ObjectId.isValid(accountId)) {
       res.status(400).json({ message: 'Specified Id is not valid' });
       return;
     }
-    Contact.findByIdAndRemove(contactId)
-      .then(() => res.json({ message: `Contact with ${contactId} was removed successfully` }))
+    Account.findByIdAndRemove(accountId)
+      .then(() => res.json({ message: `Account with ${accountId} was removed successfully` }))
       .catch((err) => res.json(err));
   });
 

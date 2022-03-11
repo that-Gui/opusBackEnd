@@ -11,36 +11,36 @@ const { Router } = require("express");
 
 
 // create an account route
-router.post('/contact', (req, res, next) => {
+router.post('/deal', (req, res, next) => {
     const { _id } = req.payload;
-    const { firstName, email, telephone, location } = req.body;
+    const {name, closeDate, sum, stages, products } = req.body;
   
-    Contact.create({ firstName, email, telephone, location, user: _id})
-      .then((newcontact) => {
-          return User.findByIdAndUpdate(_id, {$push : {contacts: newcontact._id}}, {new: true});
+    Deal.create({name, closeDate, sum, stages, products, user: _id})
+      .then((newdeal) => {
+          return User.findByIdAndUpdate(_id, {$push : {deals: newdeal._id}}, {new: true});
       }).then((response) => res.json(response))
       .catch((err) => next(err));
       
 });
 
   // get all accounts route
-router.get('/contact', (req, res, next) =>{
+router.get('/deal', (req, res, next) =>{
     const { _id } = req.payload;
-    Contact.find({user:_id}).then((response) => res.json(response))
+    Deal.find({user:_id}).then((response) => res.json(response))
     .catch((err) => res.json(err));
   
   });
 
 //route to request a single account
-router.get('/contact/:contactId', (req, res, next) => {
-    const { contactId } = req.params;
+router.get('/deal/:dealId', (req, res, next) => {
+    const { dealId } = req.params;
     const { _id } = req.payload;
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    if (!mongoose.Types.ObjectId.isValid(dealId)) {
       res.status(400).json({ message: 'Specified Id is not valid' });
       return;
     }
   
-    Contact.findById(contactId).populate('deals accounts').then((response) => {
+    Deal.findById(dealId).populate('contacts accounts products').then((response) => {
         if(_id === response.user ) {res.json(response)} else {
       res.status(400).json({ message: 'Specified Id is not valid' })};
         
@@ -49,29 +49,29 @@ router.get('/contact/:contactId', (req, res, next) => {
   });
 
 //route to update a contact
-router.put('/contact/:contactId', (req, res, next) => {
-    const { contactId } = req.params;
+router.put('/deal/:dealId', (req, res, next) => {
+    const { dealId } = req.params;
   
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    if (!mongoose.Types.ObjectId.isValid(dealId)) {
       res.status(400).json({ message: 'Specified Id is not valid' });
       return;
     }
   
-    Contact.findByIdAndUpdate(contactId, req.body, { new: true })
+    Deal.findByIdAndUpdate(dealId, req.body, { new: true })
       .then((response) => res.json(response))
       .catch((err) => res.json(err));
   });
 
 //route to delete a contact
-router.delete('/contact/:contactId', (req, res, next) => {
-    const { contactId } = req.params;
+router.delete('/deal/:dealId', (req, res, next) => {
+    const { dealId } = req.params;
   
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    if (!mongoose.Types.ObjectId.isValid(dealId)) {
       res.status(400).json({ message: 'Specified Id is not valid' });
       return;
     }
-    Contact.findByIdAndRemove(contactId)
-      .then(() => res.json({ message: `Contact with ${contactId} was removed successfully` }))
+    Deal.findByIdAndRemove(dealId)
+      .then(() => res.json({ message: `Deal with ${dealId} was removed successfully` }))
       .catch((err) => res.json(err));
   });
 

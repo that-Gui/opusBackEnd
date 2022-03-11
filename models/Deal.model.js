@@ -5,12 +5,13 @@ const dealSchema = new Schema(
   {
     name: String,
     closeDate: String,
-    contacts: [{type: Schema.Types.ObjectId, ref: 'Contact'}],
     sum: Number,
     stages: {type: String, required: true, enum: ['new', 'negotiation', 'underReview', 'followUp', 'closed']},
-    products: [],
     notes: String,
-    user: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    products: [],
+    contacts: [{type: Schema.Types.ObjectId, ref: 'Contact'}],
+    accounts: [{type: Schema.Types.ObjectId, ref: 'Account'}],
+    user: {type: Schema.Types.ObjectId, ref: 'User'},
   },
   {
     timestamps: true,
