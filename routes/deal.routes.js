@@ -13,9 +13,9 @@ const { Router } = require("express");
 // create an account route
 router.post('/deal', (req, res, next) => {
     const { _id } = req.payload;
-    const {name, closeDate, sum, stages, products } = req.body;
+    const {name, closeDate, sum, stages} = req.body;
   
-    Deal.create({name, closeDate, sum, stages, products, user: _id})
+    Deal.create({name, closeDate, sum, stages, user: _id})
       .then((newdeal) => {
           return User.findByIdAndUpdate(_id, {$push : {deals: newdeal._id}}, {new: true});
       }).then((response) => res.json(response))
