@@ -17,12 +17,10 @@ const isLoggedIn = require('../middleware/isLoggedIn'); */
 const { isAuthenticated } = require('../middleware/jwt.middleware');
 
 router.get('/verify', isAuthenticated, (req, res, next) => {
-  console.log('req.payload', req.payload);
-
   res.status(200).json(req.payload);
 });
 
-router.post('/signup', /* isLoggedOut, */ (req, res) => {
+router.post('/signup', (req, res) => {
   const { email, username, password } = req.body;
 
   if (!username) {
@@ -122,7 +120,7 @@ User.findOne({ username })
       const payload = { _id, username };
       const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
         algorithm: 'HS256',
-        expiresIn: '6h',
+        expiresIn: '69h',
       });
 
       // req.session.user = user._id; // ! better and safer but in this case we saving the entire user object
